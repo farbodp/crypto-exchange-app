@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from core.models import Customer, AbanWallet, Order
 from django.db import models
 
@@ -5,7 +6,8 @@ from .tasks import buy_from_exchange
 from .common import PURCHASE_THRESHOLD, CRYPTO_PRICE
 
 
-class OrderStrategy:
+class OrderStrategy(ABC):
+    @abstractmethod
     def execute(self, request, customer, crypto, amount, total_price):
         pass
 
