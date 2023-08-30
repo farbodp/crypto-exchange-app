@@ -43,8 +43,8 @@ class OrderView(APIView):
         customer.balance -= total_price
         customer.save()
 
-        strategy = OrderStrategyFactory.create_strategy(total_price)
-        strategy.execute(request, customer, crypto, amount, total_price)
+        order_strategy = OrderStrategyFactory.create_strategy(total_price)
+        order_strategy.execute(request, customer, crypto, amount, total_price)
 
         return Response({'message': 'Purchase order registered successfully.'})
 

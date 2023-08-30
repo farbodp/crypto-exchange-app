@@ -22,7 +22,6 @@ class SmallOrderStrategy(OrderStrategy):
 
         if pending_total >= PURCHASE_THRESHOLD:
             buy_from_exchange.delay(crypto, pending_total)
-            ###TODO: PUT below two line inside above
             pending_orders.update(status='completed')
             Order.objects.create(
                 price=total_price,
