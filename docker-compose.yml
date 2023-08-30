@@ -44,10 +44,13 @@ services:
   
   rqworker:
     image: crypto_app
-    command: python manage.py rqworker
+    volumes:
+      - ./wait-for-it.sh:/app/wait-for-it.sh
+    command: >
+      sh -c "/app/wait-for-it.sh app:8000 &&
+             python manage.py rqworker"
     depends_on:
       - redis
-      - app
 
 volumes:
   dev-db-data:
