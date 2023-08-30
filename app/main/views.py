@@ -11,6 +11,9 @@ from .tasks import buy_from_exchange
 from django.db import transaction
 
 
+CRYPTO_PRICE = 10
+PURCHASE_THRESHOLD = 10
+
 class OrderStrategy:
     def execute(self, request, customer, crypto, amount, total_price):
         pass
@@ -26,7 +29,7 @@ class SmallOrderStrategy(OrderStrategy):
 
         pending_total += total_price
 
-        if pending_total >= 10:
+        if pending_total >= PURCHASE_THRESHOLD:
             buy_from_exchange.delay(crypto, pending_total)
             ###TODO: PUT below two line inside above
             pending_orders.update(status='completed')
@@ -59,7 +62,7 @@ class LargeOrderStrategy(OrderStrategy):
 class OrderStrategyFactory:
     @staticmethod
     def create_strategy(total_price):
-        if total_price < 10:
+        if total_price < PURCHASE_THRESHOLD:
             return SmallOrderStrategy()
         else:
             return LargeOrderStrategy()
@@ -86,9 +89,8 @@ class OrderView(APIView):
         crypto = request.data.get('crypto')
         amount = request.data.get('amount')
         customer_id = request.data.get('customer_id')
-        price = 10  # Replace with actual logic to fetch cryptocurrency price
         customer = Customer.objects.get(id=customer_id)
-        total_price = Decimal(amount * price)
+        total_price = Decimal(amount * CRYPTO_PRICE)
 
         if customer.balance < total_price:
             return Response({'error': 'Insufficient account balance.'}, status=400)
