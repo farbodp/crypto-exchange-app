@@ -163,7 +163,11 @@ class OrderViewTestCase(TestCase):
         # Execution details...
 ```
 
-### Running the App
+### Style
+
+Code is formatted with [Black](https://github.com/psf/black) based on some of [PEP 8](https://peps.python.org/pep-0008/) guidelines such as line length of 79 characters.
+
+## Running the App
 
 ```sh
 docker-compose build
