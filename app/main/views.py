@@ -2,7 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from core.models import Customer, AbanWallet, Order
-from .serializers import CustomerSerializer, AbanWalletSerializer, OrderSerializer
+from .serializers import (
+    CustomerSerializer,
+    AbanWalletSerializer,
+    OrderSerializer,
+)
 from decimal import Decimal
 import time
 from django.db import models
@@ -28,7 +32,6 @@ class CustomerView(APIView):
 
 
 class OrderView(APIView):
-
     @transaction.atomic
     def post(self, request, format=None):
         crypto = request.data.get('crypto')
@@ -38,7 +41,9 @@ class OrderView(APIView):
         total_price = Decimal(amount * CRYPTO_PRICE)
 
         if customer.balance < total_price:
-            return Response({'error': 'Insufficient account balance.'}, status=400)
+            return Response(
+                {'error': 'Insufficient account balance.'}, status=400
+            )
 
         customer.balance -= total_price
         customer.save()
@@ -47,9 +52,3 @@ class OrderView(APIView):
         order_strategy.execute(request, customer, crypto, amount, total_price)
 
         return Response({'message': 'Purchase order registered successfully.'})
-
-
-
-
-
-

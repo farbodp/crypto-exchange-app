@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from core.models import Customer, AbanWallet, Order
 
+
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer

@@ -15,7 +15,9 @@ class OrderStrategy(ABC):
 class SmallOrderStrategy(OrderStrategy):
     def execute(self, request, customer, crypto, amount, total_price):
         pending_orders = Order.objects.filter(status='pending')
-        pending_total = pending_orders.aggregate(total_price=models.Sum('price'))['total_price']
+        pending_total = pending_orders.aggregate(
+            total_price=models.Sum('price')
+        )['total_price']
 
         if pending_total is None:
             pending_total = 0
